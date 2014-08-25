@@ -15,6 +15,13 @@ module Interactions =
         | None -> false
         | Some(_) -> true
 
+    let gameEnded =
+        let driver = lazy(Seq.head browsers)
+        let css = ".game-message.game-won, .game-message.game-over"
+        let selector = OpenQA.Selenium.By.CssSelector(css)
+        fun () ->
+            driver.Value.FindElements(selector).Count > 0
+
     let state () = 
         elements ".tile"
         |> List.map(fun tile ->

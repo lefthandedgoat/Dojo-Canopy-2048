@@ -152,6 +152,7 @@ module program =
             | Right -> press right
             | Down  -> press down
             if lost() || won()
+            //if gameEnded()
               then ignore()
               else play (shuffle moves)
 
