@@ -49,13 +49,13 @@ module program =
         you may have to install a browser driver
         on your machine.
         *)
-
+        start chrome
 
 
         (*
         Task 2: open the game url.
         *)
-
+        url "http://gabrielecirulli.github.io/2048/"
 
 
         (*
@@ -124,6 +124,38 @@ module program =
         smarter!
         *)
 
+        let shuffle moves =
+            let x::xs = moves
+            xs@[x]
+
+        let scores =
+            Map.ofSeq [ (Right, 2.0); (Up, 2.1); (Left,2.0); (Down, -10.0) ]
+
+        let rec getBestMove depth state moves =
+            let scores =
+                moves |> List.map (fun move ->
+                    let score01, state1 = execute state move
+                    let score1 = float(score01) * scores.[move]
+                    if depth = 0
+                      then move, score1
+                      else
+                        let _, score2 = getBestMove (depth-1) state1 (shuffle moves)
+                        move, float(score1)+score2*0.5 )
+            scores |> List.maxBy snd
+
+        let rec play moves =
+            let move = getBestMove 3 (state()) moves
+            printfn "%A" move
+            match fst move with
+            | Left  -> press left
+            | Up    -> press up
+            | Right -> press right
+            | Down  -> press down
+            if lost() || won()
+              then ignore()
+              else play (shuffle moves)
+
+        play [Up; Right; Left; Down]
 
 
         // Just to make sure the test function
