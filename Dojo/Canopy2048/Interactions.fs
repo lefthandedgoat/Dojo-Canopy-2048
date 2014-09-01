@@ -6,12 +6,12 @@ open runner
 module Interactions =
 
     let lost () =
-        match someElement ".game-message.game-over" with
+        match someElement <| css ".game-message.game-over" with
         | None -> false
         | Some(_) -> true
 
     let won () =
-        match someElement ".game-message.game-won" with
+        match someElement <| css ".game-message.game-won" with
         | None -> false
         | Some(_) -> true
 

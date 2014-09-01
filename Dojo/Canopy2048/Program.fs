@@ -39,6 +39,9 @@ open Interactions
 
 module program = 
 
+    configuration.optimizeBySkippingIFrameCheck <- true
+    configuration.optmizeByDisablingCoverageReport <- true
+
     "starting a game of 2048" &&& fun _ ->
 
         printfn "Game started."
@@ -143,8 +146,11 @@ module program =
                         move, float(score1)+score2*0.5 )
             scores |> List.maxBy snd
 
-        let rec play moves =
+        let sw = System.Diagnostics.Stopwatch.StartNew()
+        let rec play moves counter =
             let move = getBestMove 3 (state()) moves
+            
+            printfn "%i moves in %f ms" counter sw.Elapsed.TotalMilliseconds
             printfn "%A" move
             match fst move with
             | Left  -> press left
@@ -154,9 +160,9 @@ module program =
             if lost() || won()
             //if gameEnded()
               then ignore()
-              else play (shuffle moves)
+              else play (shuffle moves) (counter + 1)
 
-        play [Up; Right; Left; Down]
+        play [Up; Right; Left; Down] 0
 
 
         // Just to make sure the test function
