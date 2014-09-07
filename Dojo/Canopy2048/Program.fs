@@ -40,7 +40,7 @@ open Interactions
 module program = 
 
     configuration.optimizeBySkippingIFrameCheck <- true
-    configuration.optmizeByDisablingCoverageReport <- true
+    configuration.optimizeByDisablingCoverageReport <- true
 
     "starting a game of 2048" &&& fun _ ->
 
@@ -157,8 +157,8 @@ module program =
             | Up    -> press up
             | Right -> press right
             | Down  -> press down
-            if lost() || won()
-            //if gameEnded()
+            //if lost() || won()
+            if gameEnded()
               then ignore()
               else play (shuffle moves) (counter + 1)
 

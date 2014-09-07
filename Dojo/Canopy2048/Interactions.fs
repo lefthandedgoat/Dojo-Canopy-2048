@@ -4,23 +4,25 @@ open canopy
 open runner
 
 module Interactions =
+    let lostSelector = css ".game-message.game-over"
+    let winSelector = css ".game-message.game-won"
+    let gameOverSelector = css ".game-message.game-won, .game-message.game-over"
 
-    let lost () =
-        match someElement <| css ".game-message.game-over" with
+    let lost () =        
+        match someElement <| lostSelector with
         | None -> false
         | Some(_) -> true
 
-    let won () =
-        match someElement <| css ".game-message.game-won" with
+
+    let won () =        
+        match someElement <| winSelector with
         | None -> false
         | Some(_) -> true
 
-    let gameEnded =
-        let driver = lazy(Seq.head browsers)
-        let css = ".game-message.game-won, .game-message.game-over"
-        let selector = OpenQA.Selenium.By.CssSelector(css)
-        fun () ->
-            driver.Value.FindElements(selector).Count > 0
+    let gameEnded () =
+        match someElement <| gameOverSelector with
+        | None -> false
+        | Some(_) -> true
 
     let state () = 
         elements ".tile"
